@@ -375,11 +375,11 @@ void *_fidParamsGrowth_ = NULL;
 /* Linear Power Spectrum */
 
 double (*_fidPk_)(void*, void*) = _zeroFunc_;
-double (*_fidExtrapPk_)(void*, void*, void*) = _zeroFunc_;
+double (*_fidExtrapPk_)(void*, void*, void*, size_t*, size_t) = _zeroFunc_;
 void *_fidParamsPk_ = NULL;
 
 double (*_fidDPk_)(void*, void*) = _zeroFunc_;
-double (*_fidExtrapDPk_)(void*, void*, void*) = _zeroFunc_;
+double (*_fidExtrapDPk_)(void*, void*, void*, size_t*, size_t) = _zeroFunc_;
 void *_fidParamsDPk_ = NULL;
 
 

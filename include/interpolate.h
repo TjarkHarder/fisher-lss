@@ -42,7 +42,7 @@ typedef struct
     size_t *xIndUniq;
 
     /* Extrapolation function */
-    double (*extrapolate)(void*, void*, void*);
+    double (*extrapolate)(void*, void*, void*, size_t*, size_t); // First argument: xValues, second argument: interp_t struct, third argument: additional parameters, fourth argument: indices of xValue array that need to be extrapolated, fifth argument: size of fourth argument
 
 } interp_t;
 
@@ -64,18 +64,18 @@ int interpolate_free();
 
 
 interp_t *interpolate_interp_init(
-    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*)),
+    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*, size_t*, size_t)),
     dat_t *dat,
-    double (*extrapolate)(void*, void*, void*));
+    double (*extrapolate)(void*, void*, void*, size_t*, size_t));
 
 
 interp_t *interpolate_interp_init_splinter(
     dat_t *dat,
-    double (*extrapolate)(void*, void*, void*));
+    double (*extrapolate)(void*, void*, void*, size_t*, size_t));
 
 interp_t *interpolate_interp_init_gsl(
     dat_t *dat,
-    double (*extrapolate)(void*, void*, void*));
+    double (*extrapolate)(void*, void*, void*, size_t*, size_t));
 
 /*  ----------------------------------------------------  */
 

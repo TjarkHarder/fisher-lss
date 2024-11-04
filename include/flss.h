@@ -417,11 +417,11 @@ extern void *_fidParamsGrowth_;
 /* Linear Power Spectrum */
 
 extern double (*_fidPk_)(void*, void*);
-extern double (*_fidExtrapPk_)(void*, void*, void*);
+extern double (*_fidExtrapPk_)(void*, void*, void*, size_t*, size_t);
 extern void *_fidParamsPk_;
 
 extern double (*_fidDPk_)(void*, void*);
-extern double (*_fidExtrapDPk_)(void*, void*, void*);
+extern double (*_fidExtrapDPk_)(void*, void*, void*, size_t*, size_t);
 extern void *_fidParamsDPk_;
 
 

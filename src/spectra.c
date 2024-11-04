@@ -417,7 +417,7 @@ typedef struct
     interp_t *interp;
 
     /* Interpolation init / eval / free functions */
-    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*));
+    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*, size_t*, size_t));
     double (*interpEval)(void*, interp_t*, void*);
     interp_t *(*interpFree)(interp_t*);
 
@@ -2427,7 +2427,7 @@ int spec_in_dpnl_set_file(const char *file)
 /*  ------------------------------------------------------------------------------------------------------  */
 
 
-static double _spec_pnl_extrapolate(void *var, void *interp, void *params)
+static double _spec_pnl_extrapolate(void *var, void *interp, void *params, size_t *indices, size_t size)
 {
     /*
 
@@ -2444,6 +2444,23 @@ static double _spec_pnl_extrapolate(void *var, void *interp, void *params)
     kern_t *kern = specArg -> kern;
 
     double k = kernels_qget_k(kern, 0);
+
+    /* Can only extrapolate in k < kmin */
+    if (size > 1 || *indices != 1)
+      {
+        printf("Can only extrapolate the power spectrum in 'k', but not in 'z' or 'mu'.\n");
+        exit(1);
+
+        return NAN;
+      }
+
+    if (k > interpPnl -> xBounds[1][1])
+      {
+        printf("Can only extrapolate the power spectrum in 'k < kmin', but not in 'k > kmax'.\n");
+        exit(1);
+
+        return NAN;
+      }
 
     kernels_qset_k(kern, 0, interpPnl -> xBounds[1][0]);
     double pnlBound = _specPnl_(specArg, NULL);

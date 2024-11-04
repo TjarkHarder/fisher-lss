@@ -44,7 +44,7 @@ typedef struct
 
     interp_t *interp;
 
-    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*));
+    interp_t *(*interpInit)(dat_t*, double (*)(void*, void*, void*, size_t*, size_t));
     double (*interpEval)(void*, interp_t*, void*);
     interp_t *(*interpFree)(interp_t*);
 
@@ -484,8 +484,8 @@ static double _fid_growth(void *var, void *params);
 static double _fid_pk(void *var, void *params);
 static double _fid_dpk(void *var, void *params);
 
-static double _fid_pk_extrapolate(void *var, void *interp, void *params);
-static double _fid_dpk_extrapolate(void *var, void *interp, void *params);
+static double _fid_pk_extrapolate(void *var, void *interp, void *params, size_t *indices, size_t size);
+static double _fid_dpk_extrapolate(void *var, void *interp, void *params, size_t *indices, size_t size);
 
 /*  ######################################################################################################  */
 /*  ------------------------------------------------------------------------------------------------------  */
@@ -690,7 +690,7 @@ static int _setup_interp(void)
     char *file = NULL;
     char *label;
 
-    double (*extrapolate)(void*, void*, void*);
+    double (*extrapolate)(void*, void*, void*, size_t*, size_t);
 
     for (size_t i = 0; i < _fidInterp -> size; i++)
       {
@@ -1882,7 +1882,7 @@ static double _fid_dpk(void *var, void *params)
 /*  ------------------------------------------------------------------------------------------------------  */
 
 
-static double _fid_pk_extrapolate(void *var, void *interp, void *params)
+static double _fid_pk_extrapolate(void *var, void *interp, void *params, size_t *indices, size_t size)
 {
     /*
 
@@ -1901,6 +1901,8 @@ static double _fid_pk_extrapolate(void *var, void *interp, void *params)
     */
 
     (void) params;
+    (void) indices;
+    (void) size;
 
     interp_t *interpPk = (interp_t*) interp;
 
@@ -1919,7 +1921,7 @@ static double _fid_pk_extrapolate(void *var, void *interp, void *params)
 }
 
 
-static double _fid_dpk_extrapolate(void *var, void *interp, void *params)
+static double _fid_dpk_extrapolate(void *var, void *interp, void *params, size_t *indices, size_t size)
 {
     /*
 
@@ -1928,6 +1930,8 @@ static double _fid_dpk_extrapolate(void *var, void *interp, void *params)
     */
 
     (void) params;
+    (void) indices;
+    (void) size;
 
     interp_t *interpDPk = (interp_t*) interp;
 

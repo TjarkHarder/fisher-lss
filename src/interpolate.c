@@ -24,7 +24,7 @@
 /*  ------------------------------------------------------------------------------------------------------  */
 
 
-interp_t *interpolate_interp_init(interp_t *(*interpInit)(dat_t *, double (*)(void*, void*, void*)), dat_t *dat, double (*extrapolate)(void*, void*, void*))
+interp_t *interpolate_interp_init(interp_t *(*interpInit)(dat_t *, double (*)(void*, void*, void*, size_t*, size_t)), dat_t *dat, double (*extrapolate)(void*, void*, void*, size_t*, size_t))
 {
     /*
 
@@ -42,7 +42,7 @@ interp_t *interpolate_interp_init(interp_t *(*interpInit)(dat_t *, double (*)(vo
 /*  ------------------------------------------------------------------------------------------------------  */
 
 
-interp_t *interpolate_interp_init_splinter(dat_t *dat, double (*extrapolate)(void*, void*, void*))
+interp_t *interpolate_interp_init_splinter(dat_t *dat, double (*extrapolate)(void*, void*, void*, size_t*, size_t))
 {
     /*
 
@@ -328,7 +328,7 @@ interp_t *interpolate_interp_init_splinter(dat_t *dat, double (*extrapolate)(voi
 /*  ------------------------------------------------------------------------------------------------------  */
 
 
-interp_t *interpolate_interp_init_gsl(dat_t *dat, double (*extrapolate)(void*, void*, void*))
+interp_t *interpolate_interp_init_gsl(dat_t *dat, double (*extrapolate)(void*, void*, void*, size_t*, size_t))
 {
     /*
 
@@ -422,15 +422,46 @@ double interpolate_interp_eval_splinter(void *values, interp_t *interp, void *pa
 
     /* Only keep the unique x-dimensions */
     double *xValuesUniq = malloc(sizeof(double) * interp -> xDimUniq);
+
+    size_t indicesExtrapSize = 0;
+    size_t *indicesExtrap = NULL;
     bool inBounds = true;
 
     for (size_t i = 0; i < interp -> xDimUniq; i++)
       {
         xValuesUniq[i] = xValues[interp -> xIndUniq[i]];
 
-        /* Check the bounds */
-        if (xValuesUniq[i] < interp -> xBounds[interp -> xIndUniq[i]][0] || xValuesUniq[i] > interp -> xBounds[interp -> xIndUniq[i]][1])
+        /* Check the lower bounds */
+        if (xValuesUniq[i] < interp -> xBounds[interp -> xIndUniq[i]][0])
+          {
+            if (fabs(xValuesUniq[i] - interp -> xBounds[interp -> xIndUniq[i]][0]) < __ABSTOL__)
+              {
+                xValuesUniq[i] = interp -> xBounds[interp -> xIndUniq[i]][0];
+
+                continue;
+              }
+
+            indicesExtrap = realloc(indicesExtrap, sizeof(size_t) * (indicesExtrapSize + 1));
+            indicesExtrap[indicesExtrapSize++] = interp -> xIndUniq[i];
+
             inBounds = false;
+          }
+
+        /* Check the upper bounds */
+        if (xValuesUniq[i] > interp -> xBounds[interp -> xIndUniq[i]][1])
+          {
+            if (fabs(xValuesUniq[i] - interp -> xBounds[interp -> xIndUniq[i]][1]) < __ABSTOL__)
+              {
+                xValuesUniq[i] = interp -> xBounds[interp -> xIndUniq[i]][1];
+
+                continue;
+              }
+
+            indicesExtrap = realloc(indicesExtrap, sizeof(size_t) * (indicesExtrapSize + 1));
+            indicesExtrap[indicesExtrapSize++] = interp -> xIndUniq[i];
+
+            inBounds = false;
+          }
       }
 
     /* Result of the interpolation */
@@ -449,13 +480,6 @@ double interpolate_interp_eval_splinter(void *values, interp_t *interp, void *pa
       {
         if (interp -> extrapolate == NULL)
           {
-            for (size_t i = 0; i < interp -> xDimUniq; i++)
-              {
-                xValuesUniq[i] = xValues[interp -> xIndUniq[i]];
-
-                printf("%e < %e < %e\n", interp -> xBounds[interp -> xIndUniq[i]][0], xValuesUniq[i], interp -> xBounds[interp -> xIndUniq[i]][1]);
-              }
-
             /* Cannot extrapolate */
             printf("Cannot extrapolate if no extrapolation function has been provided.\n");
             exit(1);
@@ -463,11 +487,12 @@ double interpolate_interp_eval_splinter(void *values, interp_t *interp, void *pa
             return NAN;
           }
 
-        resReturn = interp -> extrapolate(values, interp, params);
+        resReturn = interp -> extrapolate(values, interp, params, indicesExtrap, indicesExtrapSize);
       }
 
     /* Free memories */
     free(xValuesUniq);
+    free(indicesExtrap);
 
     return resReturn;
 }
@@ -504,7 +529,10 @@ double interpolate_interp_eval_gsl(void *values, interp_t *interp, void *params)
             return NAN;
           }
 
-        res = interp -> extrapolate(values, interp, params);
+        size_t size = 1;
+        size_t indices[1] = {0};
+
+        res = interp -> extrapolate(values, interp, params, indices, size);
       }
 
     return res;
@@ -536,7 +564,10 @@ double interpolate_interp_eval_deriv_gsl(void *values, interp_t *interp, void *p
             goto extrapolateErr;
           }
 
-        res = interp -> extrapolate(values, interp, params);
+        size_t size = 1;
+        size_t indices[1] = {0};
+
+        res = interp -> extrapolate(values, interp, params, indices, size);
       }
 
     return res;
