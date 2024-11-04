@@ -1,9 +1,0 @@
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/splinter-4-0.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/splinter-static-4-0.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/splinter-test.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/edit_cache.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/rebuild_cache.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/list_install_components.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/install.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/install/local.dir
-/home/tjark/Physics/masterthesis/fisher-lss-3.2/external/splinter/build/CMakeFiles/install/strip.dir

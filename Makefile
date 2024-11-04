@@ -13,7 +13,7 @@ CUBADIR = $(MDIR)/external/Cuba-4.2.2
 
 splinter: libsplinter-static-4-0.a
 libsplinter-static-4-0.a:
-	(cd $(SPLINTERDIR) && if ! [ -e build ]; then mkdir build ; fi; cd build CXX=$(which g++) && cmake .. && make)
+	(cd $(SPLINTERDIR) && if ! [ -e build ]; then mkdir build ; fi; cd build CXX=g++ && cmake .. && make)
 
 cuba: libcuba.a
 libcuba.a:
@@ -90,22 +90,22 @@ fisher-lss: libfisherlss.a
 libfisherlss.a: $(SOURCE)
 	$(AR) $@ $(addprefix build/, $(SOURCE))
 
-example: example.c
+example: example.c libfisherlss.a
 	$(CC) $(ERRFLAG) $(EXAMPLEDIR)/example.c $(OPTFLAG) $(OMPFLAG) $(LDFLAG) -o $(EXAMPLEDIR)/example.o $(LIBS) $(INCLUDESSPLINTER)
 
 # Clean
 clean: clean-build clean-output clean-cuba clean-splinter
 
-clean-cuba: libcuba.a
+clean-cuba:
 	(cd $(CUBADIR) && make distclean)
 
-clean-splinter: libsplinter-static-4-0.a
-	(cd $(SPLINTERDIR)/build && make clean)
+clean-splinter:
+	(cd $(SPLINTERDIR)/build && make clean && rm -rf ../build)
 
-clean-build: .base-build
+clean-build:
 	rm -rf $(WRKDIR);
 	rm -f libfisherlss.a
 	rm -f $(EXAMPLEDIR)/example.o
 
-clean-output: .base-output
+clean-output:
 	rm -rf $(OUTPUTDIR);
