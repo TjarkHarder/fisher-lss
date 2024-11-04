@@ -5,6 +5,8 @@ This code accompanies my master's thesis (see the '/doc' directory) in which I i
 
 ## Requirements
 
+For anyone interested enough in using this code, one should first make sure that the following requirements are met
+
 - OpenMP
 - GNU Scientific Library (GSL) (see https://www.gnu.org/software/gsl/)
 - Basic Linear Algebra Subsystems (BLAS)
@@ -18,17 +20,18 @@ One important note regarding Cuba, I have slightly modified the source code (lin
 
 ## Compile
 
-For anyone interested enough in using this code, the 'example.c' file in the '/example' directory shows the basic usage in order to produce the results in my master's thesis.
+In order to compile the code into a static library, one may use the command
 
-For this, one may use the provided Makefile to create a static library and compile the example by running
+- make fisher-lss
+
+To showcase the basic useage of the library, the 'example.c' file in the '/example' directory shows the majority of the functions needed to produce the (numerical) results in my master's thesis. TO compile the example, one may simply call
+
+- make example
+
+or also
 
 - make all
 
-If one only wishes to create the library, or only the example, run
-
-- make fisher-lss
-- make example
-
-In order to undo the previous step, simply run
+if one wishes to compile the example automatically after the library. In order to undo previous make calls, one can simply do so by calling
 
 - make clean
