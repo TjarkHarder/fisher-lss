@@ -13,7 +13,7 @@ For anyone interested enough in using this code, one should first make sure that
 - Linear Algebra PACKage (LAPACK)
 - cmake, g++, gcc, ... (build_essential)
 
-Additionally, SPLINTER by Bjarne Grimstad (see https://github.com/bgrimstad/splinter) is used for several interpolation functions, as well as Cuba by Thomas Hahn (see https://feynarts.de/cuba/) is used for several bin-average integrals. These libraries are already included in the '/external' directory and are also compiled by following the instructions outlined above.
+Additionally, SPLINTER by Bjarne Grimstad (see https://github.com/bgrimstad/splinter) is used for several interpolation functions, as well as Cuba by Thomas Hahn (see https://feynarts.de/cuba/) for several bin-average integrals. These libraries are already included in the '/external' directory and are also compiled by following the instructions outlined below.
 
 One important note regarding Cuba, I have slightly modified the source code (line 72 in Cuba-4.2.2/src/common/Fork.c) to forcefully disable parallisation in Cuba, as it seems to mess with OpenMp.
 
