@@ -1,21 +1,25 @@
 # README
 
-I have developed this code ('fisher-lss') as part of my Master's Thesis at Heidelberg University under supervision by Luca Amendola at the Institute of Theoretical Physics (ITP).
-
-The code calculates the Fisher information matrix of model independent variables of the one-loop Power Spectrum and tree-level Bispectrum for a Euclid like survey (or any other survey, given the correct fiducials).
-To extend the usual Gaussian approximation of the PP, BB and PB covariance matrices, the code includes the next higher order terms, allowing for correlation between different power spectrum and bispectrum modes in the respective covariance matrix.
-
-The code is mostly finished and running, but needs testing for the B only and P+B Fisher matrices and their forecasts. It also requires some optimisation in some areas, which I am currently working on.
+This code accompanies my master's thesis (see the '/doc' directory) in which I investigate non-Gaussian corrections to the estimators of the (one-loop) power spectrum and (tree-level) bispectrum in a Fisher forecast for a Euclid-like survey.
 
 
 ## Example
 
-The 'example.c' file in the '/example' directory has been used to produce the preliminary results in the '/output/spec' and '/output/fish' directories. To get the contraints on the variables (i.e. the '...-err.dat' files) + the triangle plots in the '/plots' directory, one can use the 'fisher-lss-plots.py' script.
+For anyone interested enough in using this code, the 'example.c' file in the '/example' directory shows the basic usage in order to produce the results in my master's thesis.
+
+
+## Compile
+
+In order to use the code, one should run
 
 
 ## Requirements
-The code requires the GNU Scientific Library (GSL) and SPLINTER by Bjarne Grimstad (https://github.com/bgrimstad/splinter) to run. To be able to run 'make fisher-lss', one should make sure the libraries for GSL and SPLINTER are properly linked in 'Makefile'. The usage of the created static library is shown in '/example'.
 
+- OpenMP
+- GNU Scientific Library (GSL) (see https://www.gnu.org/software/gsl/)
+- Basic Linear Algebra Subsystems (BLAS)
+- Linear Algebra PACKage (LAPACK)
 
-## Documentation
-In progress...
+Additionally, SPLINTER by Bjarne Grimstad (see https://github.com/bgrimstad/splinter) is used for several interpolation functions, as well as Cuba by Thomas Hahn (see https://feynarts.de/cuba/) is used for several bin-average integrals. These libraries are already included in the '/external' directory and are also compiled by following the instructions outlined above.
+
+One important note regarding Cuba, I have slightly modified the source code (line 72 in Cuba-4.2.2/src/common/Fork.c) to forcefully disable parallisation in Cuba, as it seems to mess with OpenMp.
