@@ -1,6 +1,6 @@
 # README
 
-This code accompanies my master's thesis (see the '/doc' directory) in which I investigate non-Gaussian corrections to the estimators of the (one-loop) power spectrum and (tree-level) bispectrum in a Fisher forecast for a Euclid-like survey.
+This code accompanies my master's thesis in which I investigate non-Gaussian corrections to the estimators of the (one-loop) power spectrum and (tree-level) bispectrum in a Fisher forecast for a Euclid-like survey.
 
 
 ## Requirements
